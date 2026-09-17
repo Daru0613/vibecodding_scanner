@@ -5,6 +5,16 @@ from typing import Any
 
 
 @dataclass
+class Candidate:
+    url: str
+    source: str
+    source_query: str = ""
+    source_seen_at: str = ""
+    collected_at: str = ""
+    url_type: str = "UNKNOWN"
+
+
+@dataclass
 class Evidence:
     signature: str
     location: str
@@ -56,45 +66,65 @@ class PageData:
 class ScanRecord:
     site_id: str
     original_url: str
+    normalized_url: str = ""
     final_url: str = ""
     domain: str = ""
     http_status: int = 0
+    content_type: str = ""
+    content_length: int = 0
+    http_date: str = ""
+    http_last_modified: str = ""
+    http_etag: str = ""
+    source: str = ""
+    source_query: str = ""
+    source_seen_at: str = ""
+    collected_at: str = ""
+    checked_at: str = ""
     page_title: str = ""
     html_lang: str = ""
     korea_score: int = 0
-    korea_class: str = "NON_KR_OR_UNKNOWN"
+    korea_class: str = "UNKNOWN"
     hangul_ratio: float = 0.0
+    korea_evidence: list[str] = field(default_factory=list)
+    lovable_class: str = "NO_LOVABLE_EVIDENCE"
+    lovable_evidence: list[dict[str, Any]] = field(default_factory=list)
+    claude_class: str = "NO_CLAUDE_EVIDENCE"
+    claude_evidence: list[dict[str, Any]] = field(default_factory=list)
+    vibe_result: str = "UNKNOWN"
     builder: str = "unknown"
     builder_score: int = 0
     builder_class: str = "UNKNOWN"
     builder_evidence: list[dict[str, Any]] = field(default_factory=list)
     framework: dict[str, Any] = field(default_factory=dict)
+    libraries: list[str] = field(default_factory=list)
     external_domains: list[str] = field(default_factory=list)
     response_time: float = 0.0
+    response_time_ms: float = 0.0
     scan_timestamp: str = ""
     needs_deep_scan: bool = False
     published_date: str = ""
+    exclusion_reason: str = ""
     error: str = ""
 
     def csv_dict(self) -> dict[str, Any]:
-        """Human-facing CSV fields first, followed by research/audit detail."""
-        platform = {
-            "claude": "Claude",
-            "lovable": "Lovable",
-            "v0": "Other AI (v0)",
-            "replit": "Other AI (Replit)",
-            "base44": "Other AI (Base44)",
-            "manus": "Other AI (Manus)",
-            "unknown": "Unknown",
-        }.get(self.builder, f"Other AI ({self.builder})")
+        """Compact research-facing CSV; full detail remains available in JSONL/SQLite."""
         return {
-            "바이브코딩 유추 플랫폼": platform,
-            "링크": self.final_url or self.original_url,
-            "바이브코딩 의심 점수": self.builder_score,
-            "취약점": "NOT_SCANNED",
-            "취약한 데이터": "",
-            "게시날짜": self.published_date,
-            **asdict(self),
+            "site_url": self.final_url or self.normalized_url or self.original_url,
+            "domain": self.domain,
+            "page_title": self.page_title,
+            "source": self.source,
+            "source_query": self.source_query,
+            "source_seen_at": self.source_seen_at,
+            "http_status": self.http_status,
+            "response_time_ms": self.response_time_ms,
+            "lovable_class": self.lovable_class,
+            "lovable_evidence": self.lovable_evidence,
+            "claude_class": self.claude_class,
+            "claude_evidence": self.claude_evidence,
+            "vibe_result": self.vibe_result,
+            "framework": self.framework,
+            "needs_deep_scan": self.needs_deep_scan,
+            "error": self.error,
         }
 
     def to_dict(self) -> dict[str, Any]:

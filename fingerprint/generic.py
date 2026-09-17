@@ -15,5 +15,7 @@ class GenericDetector(FingerprintDetector):
         if "tailwind" in blob: framework["css"] = "tailwind"
         if "tanstack" in blob: framework["router"] = "tanstack"
         if "supabase" in blob: framework["backend"] = "supabase"
+        if "firebase" in blob: framework["firebase"] = True
+        if 'stroke="currentcolor"' in blob and 'viewbox="0 0 24 24"' in blob: framework["icons"] = "lucide-style"
         return DetectionResult(framework=framework)
 

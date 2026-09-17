@@ -1,0 +1,49 @@
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+
+# Generated research outputs
+*.csv
+*.jsonl
+
+# Local databases and SQLite runtime files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build and package artifacts
+build/
+dist/
+*.egg-info/
+
+# IDE and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+~$*

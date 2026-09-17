@@ -1,19 +1,17 @@
 http:
-  global_concurrency: 10
+  global_concurrency: 5
   per_domain_concurrency: 1
   connect_timeout: 5
-  read_timeout: 10
-  max_redirects: 5
-  retry: 1
+  read_timeout: 8
+  max_redirects: 3
+  retry: 0
   max_response_size: 2097152
-  max_js_files: 3
   user_agent: OpenWeb-KR-Research/1.0 (+public-pages-only)
 korea:
   confirmed: 5
   possible: 3
   hangul_ratio: 0.15
 collectors:
-  # General/custom domains are the default. Hosted-platform CT collection is opt-in.
   search: true
   search_provider: brave
   search_queries:
@@ -28,21 +26,44 @@ collectors:
     - 'lovable korea in:name,description,readme'
     - 'v0 한국 in:name,description,readme'
     - 'base44 한국 in:name,description,readme'
-  ct: false
+  ct: true
+  commoncrawl: true
+  public_files: []
   excluded_domain_suffixes:
-    - lovable.app
-    - vercel.app
-    - github.io
     - github.com
     - githubusercontent.com
     - githubassets.com
     - githubapp.com
-    - netlify.app
-    - pages.dev
-    - replit.app
-    - base44.app
-  commoncrawl: false
-  public_files: []
-  ct_queries: ["%.lovable.app"]
+    - railway.com
+    - vercel.com
+    - netlify.com
+    - lovable.dev
+    - replit.com
+    # Video and social platforms are source noise, not deployed applications.
+    - youtube.com
+    - youtu.be
+    - vimeo.com
+    - dailymotion.com
+    - twitch.tv
+    - tiktok.com
+    - instagram.com
+    - facebook.com
+    - twitter.com
+    - x.com
+    # China-domain and major Chinese content platforms.
+    - cn
+    - bilibili.com
+    - douyin.com
+    - youku.com
+    - iqiyi.com
+    - weibo.com
+    - zhihu.com
+    - baidu.com
+    - qq.com
+    - xiaohongshu.com
+    - kuaishou.com
+  ct_queries:
+    - '%.lovable.app'
   commoncrawl_index: latest
-  commoncrawl_queries: ["*.lovable.app/*"]
+  commoncrawl_queries:
+    - '*.lovable.app/*'
